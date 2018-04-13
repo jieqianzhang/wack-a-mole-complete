@@ -3,7 +3,18 @@ $(document).ready(function($) {
   var gameTimer = 0;
   var score = 0;
 
-  //Creating our own functions allows us to break this complex thing into multiple pieces, and give names that make sense to us, like 'startGame' to trigger the moles and mice!
+  //Step 1: Pay attention to that play button and listen for any clicks
+  $(".play").click(function() {
+    //Reset the game anytime it's clicked, so you know it will always be a fresh start
+    resetGame();
+    //Fade out the button, and pass a function as a second argument to fade it out
+    $(".play").fadeOut(500, function() {
+      // Gets called after fadeOut
+      startGame();
+    });
+  });
+
+  //Step 2: Creating our own functions allows us to break this complex thing into multiple pieces, and give names that make sense to us, like 'startGame' to trigger the moles and mice!
   var startGame = function() {
 
     //Now we overwrite the 'gameTimer' and use JavaScript's 'setInterval' function to create a mole or a mouse every second (that's what the 1000 is, try changing that to create moles faster or slower)
@@ -27,7 +38,7 @@ $(document).ready(function($) {
     }, 1000)
   };
 
-  //Create a new function, createRodent, that accepts one *argument* and calls that moleOrMouse.
+  //Step 3: Create a new function, createRodent, that accepts one *argument* and calls that moleOrMouse.
   var createRodent = function(moleOrMouse) {
     //Get a random number, 0-5 (because the first item as far as jQuery is concerned is the zero item)
     var randomCircle = Math.round(Math.random() * 5);
@@ -42,12 +53,12 @@ $(document).ready(function($) {
     $moleHole.children('div').animate({
       "width": "150px",
       "height": "150px"
-    }, 600, function() {
+    }, 400, function() {
       //The last argument animate takes is a function, which gets called after the animation function finishes. So let's call another animate function, this one to scale it back down to zero
-      t$moleHole.children('div').animate({
+      $moleHole.children('div').animate({
         "width": "0px",
         "height": "0px"
-      }, 600, function() {
+      }, 400, function() {
         //Once that's finished, remove the bugger
         $moleHole.children('div').remove();
       })
@@ -55,7 +66,8 @@ $(document).ready(function($) {
   }
   //WOAH! Look up at all those brackets and parentheses. That is a great place to miss one, and break everything.
 
-  //Set up jQuery to pay attention anytime any "mole-hole" is clicked
+
+  //Step 4: Set up jQuery to pay attention anytime any "mole-hole" is clicked
   $(".mole-hole").click(function() {
     //Check if the clicked on "mole-hole" has a child with a class of mole
     if ($(this).children("div").hasClass("mole")) {
@@ -71,6 +83,7 @@ $(document).ready(function($) {
         //If they have any lives (more than zero), knock the first (of the remaining) one [0] off by removing its 'full' class
         $(".full").eq(0).removeClass('full');
       } else {
+        $(".full").eq(0).removeClass('full');
         //If they have no lives left, trigger the game over function
         gameOver();
       }
@@ -80,7 +93,7 @@ $(document).ready(function($) {
     $(".number").text(score);
   })
 
-
+  // Step 5: Write a function to stop the circles from popping out
   var gameOver = function() {
     //Bring back the play button, but change the text to reflect that it's a game over, then fade it back in
     $(".play").text("Game over! Play again?").fadeIn(200);
@@ -88,7 +101,7 @@ $(document).ready(function($) {
     clearInterval(gameTimer);
   }
 
-  //Write a function to reset the game so folks can play again after losing
+  //Step 5: Write a function to reset the game so folks can play again after losing
   var resetGame = function() {
     //Score back to zero
     score = 0;
@@ -98,16 +111,7 @@ $(document).ready(function($) {
     $(".number").text(score);
   }
 
-  //Pay attention to that play button and listen for any clicks
-  $(".play").click(function() {
-    //Reset the game anytime it's clicked, so you know it will always be a fresh start
-    resetGame();
-    //Fade out the button, and pass a function as a second argument to fade it out
-    $(".play").fadeOut(500, function() {
-      // Gets called after fadeOut
-      startGame();
-    });
-  });
+
 
 
 });
